@@ -1,0 +1,7 @@
+.converter{
+    margin: 1rem;
+}
+.converter .input-label{
+    font-weight: 600;
+    font-size: 18px;
+}

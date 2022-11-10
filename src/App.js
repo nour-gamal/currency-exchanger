@@ -1,7 +1,7 @@
 import Router from "./Router";
 import { ToastContainer } from "react-toastify";
+import "antd/dist/antd.min.css";
 import "react-toastify/dist/ReactToastify.css";
-import "antd/dist/antd.less";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 

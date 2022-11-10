@@ -1,13 +1,15 @@
 import axios from "axios";
-import { toastError, toastSuccess } from "../Helpers/toasters";
-export const baseUrl =
-	"http://ec2-54-194-113-34.eu-west-1.compute.amazonaws.com:1331/";
+import { toastError, toastSuccess } from "../helpers/Toasters";
+
+//Declarations
+const baseUrl = process.env.REACT_APP_BASE_URL;
+const apikey = process.env.REACT_APP_API_KEY;
 
 export function getResource(path, onSuccess, onFail) {
 	let requestData = {
 		method: "get",
 		url: baseUrl + path,
-		headers: {},
+		headers: { apikey },
 	};
 
 	axios(requestData).then(
@@ -31,7 +33,7 @@ export function postResource(path, data, onSuccess, onFail, multiPart = false) {
 		headers: {},
 		data,
 	};
-
+	requestData.headers.append("apikey", apikey);
 	if (multiPart) {
 		requestData.headers = {
 			...requestData.headers,
@@ -63,7 +65,7 @@ export function deleteResource(path, data, onSuccess, onFail) {
 		headers: {},
 		data,
 	};
-
+	requestData.headers.append("apikey", apikey);
 	axios(requestData).then(
 		(res) => {
 			if (!res.data.success) {
@@ -94,6 +96,7 @@ export function patchResource(
 		headers: {},
 		data,
 	};
+	requestData.headers.append("apikey", apikey);
 
 	if (multipart) {
 		requestData.headers = {
@@ -125,7 +128,7 @@ export function putResource(path, data, onSuccess, onFail, multipart = false) {
 		headers: {},
 		data,
 	};
-
+	requestData.headers.append("apikey", apikey);
 	if (multipart) {
 		requestData.headers = {
 			...requestData.headers,
