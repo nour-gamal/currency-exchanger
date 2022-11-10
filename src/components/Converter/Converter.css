@@ -4,4 +4,25 @@
 .converter .input-label{
     font-weight: 600;
     font-size: 18px;
+    display: block;
+}
+.converter .convertbox-section{
+    width: 80%;
+    margin:auto
+}
+.converter .exchangeArrow-figure{
+    width: 30px;
+    margin: 0 1rem;
+}
+.converter .exchangeArrow-figure>img{
+    width: 100%;
+    cursor: pointer;
+}
+.converter .convert-button{
+    margin: 1rem 0;
+}
+.converter .input-section{
+    display: flex;
+    flex-direction: column;
+    flex:1
 }

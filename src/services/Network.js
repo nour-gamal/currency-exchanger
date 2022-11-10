@@ -6,3 +6,8 @@ export const convertFromTo = (data, success, fail) => {
 	const path = `/fixer/convert?to=${to}&from=${from}&amount=${amount}`;
 	getResource(path, success, fail);
 };
+
+export const getSymbols = (success, fail) => {
+	const path = `/fixer/symbols`;
+	getResource(path, success, fail);
+};
