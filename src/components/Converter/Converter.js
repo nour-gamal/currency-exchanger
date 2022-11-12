@@ -1,5 +1,6 @@
 import { Col, Input, Select, Row, Button } from "antd";
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import exchangeIcon from "../../assets/icons/exchange-arrow.svg";
 import { convertFromTo, getSymbols } from "../../services/Network";
 import "./Converter.css";
@@ -11,10 +12,12 @@ function Converter() {
 	const [toCurrency, updateToCurrency] = useState(null);
 	const [conversionResult, updateConversionResult] = useState(null);
 	const [unitRate, updateUnitRate] = useState(null);
-
 	useEffect(() => {
 		if (fromCurrency && toCurrency) {
 			handleConvert(1);
+			if (conversionResult) {
+				handleConvert();
+			}
 		}
 		// eslint-disable-next-line
 	}, [fromCurrency, toCurrency]);
@@ -46,13 +49,14 @@ function Converter() {
 			to: toCurrency,
 			amount: unitAmount ? unitAmount : amount,
 		};
+
 		convertFromTo(
 			data,
 			(success) => {
 				if (unitAmount) {
-					// updateUnitRate();
+					updateUnitRate(success.result);
 				} else {
-					// updateConversionResult();
+					updateConversionResult(success.result);
 				}
 			},
 			(fail) => {}
@@ -84,8 +88,8 @@ function Converter() {
 		<div className="converter">
 			<h1 className="main-title">Currency Exchanger</h1>
 			<Row>
-				{/* Currency Input Section */}
-				<Col md={8}>
+				{/* Currency Amount Section */}
+				<Col md={8} xs={24} className="amount-section">
 					<section>
 						<label className="input-label">Amount</label>
 						<Input
@@ -98,20 +102,20 @@ function Converter() {
 						/>
 					</section>
 					{/* display only if from and to currencies ara exist */}
-					{/* {fromCurrency && toCurrency && (
-						<section className="currencyResultBox">
-							1.00 {fromCurrency}= {unitRate} {toCurrency}
+					{fromCurrency && toCurrency && (
+						<section className="result-box">
+							1.00 {fromCurrency} = {unitRate} {toCurrency}
 						</section>
-					)} */}
-					<section className="currencyResultBox">1.00 EGP= 3 USD</section>
+					)}
 				</Col>
 				{/* Conversion convert box section */}
-				<Col md={16}>
+				<Col md={16} xs={24} className="d-flex flex-1">
 					<section className="convertbox-section">
-						<div className="d-flex flex-1 align-items-center">
+						<div className="d-flex flex-1 align-items-end">
 							<section className="input-section">
 								<label className="input-label">From</label>
 								<Select
+									value={fromCurrency}
 									disabled={!amount}
 									showSearch
 									onChange={(option) => {
@@ -140,6 +144,7 @@ function Converter() {
 							<section className="input-section">
 								<label className="input-label">To</label>
 								<Select
+									value={toCurrency}
 									disabled={!amount}
 									showSearch
 									onChange={(option) => {
@@ -167,16 +172,20 @@ function Converter() {
 							type="primary"
 							className="w-100 convert-button"
 							disabled={!fromCurrency || !toCurrency}
-							onClick={handleConvert}>
+							onClick={() => {
+								handleConvert();
+							}}>
 							Convert
 						</Button>
-
-						<section>
-							<div className="result">
-								{conversionResult}
-								{toCurrency}
+						{conversionResult && (
+							<div className="d-flex justify-content-around align-items-center">
+								<div className="result-box">
+									{conversionResult}
+									{toCurrency}
+								</div>
+								<Link to="/">More Details</Link>
 							</div>
-						</section>
+						)}
 					</section>
 				</Col>
 			</Row>
