@@ -5,7 +5,7 @@ import exchangeIcon from "../../assets/icons/exchange-arrow.svg";
 import { convertFromTo, getSymbols } from "../../services/Network";
 import "./Converter.css";
 
-function Converter() {
+function Converter({ getFromCurrency }) {
 	const [amount, updateAmount] = useState(null);
 	const [currencyList, updateCurrencyList] = useState([]);
 	const [fromCurrency, updateFromCurrency] = useState(null);
@@ -32,6 +32,7 @@ function Converter() {
 			}
 			case "fromCurrency": {
 				updateFromCurrency(value);
+				getFromCurrency(value);
 				break;
 			}
 			case "toCurrency": {
