@@ -36,17 +36,13 @@ function CurrencyChart({ fromCurrency, toCurrency }) {
 			const isLastDay = monthNumber !== nextLoopMonthNumber;
 			//Get the value of the last day of the month
 			if (isLastDay) {
-				console.log(ratesObject[rateKey][toCurrency]);
-				dataArr.splice(monthNumber, 0, [
-					parseInt(monthNumber),
-					ratesObject[rateKey][toCurrency],
-				]);
+				dataArr.push([parseInt(monthNumber), ratesObject[rateKey][toCurrency]]);
 			}
 		});
-		dataArr = dataArr.splice(0, 1);
+
 		return dataArr;
 	};
-
+	console.log(chartData);
 	const data = React.useMemo(
 		() => [
 			{
