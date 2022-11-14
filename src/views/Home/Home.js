@@ -24,6 +24,7 @@ function Home() {
 					"JPY",
 					"AUD",
 					"CAD",
+					"SEK",
 				],
 			};
 			getLatest(

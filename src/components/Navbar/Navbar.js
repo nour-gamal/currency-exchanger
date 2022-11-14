@@ -7,7 +7,9 @@ function Navbar() {
 		<nav className="navbar-container">
 			{/* Logo figure */}
 			<figure className="logo-container">
-				<img src={Logo} alt="logo" />
+				<Link to="/">
+					<img src={Logo} alt="logo" />
+				</Link>
 			</figure>
 
 			{/* Navbar links to navigate to conversions views */}

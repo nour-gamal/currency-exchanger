@@ -5,13 +5,22 @@ import exchangeIcon from "../../assets/icons/exchange-arrow.svg";
 import { convertFromTo, getSymbols } from "../../services/Network";
 import "./Converter.css";
 
-function Converter({ getFromCurrency }) {
-	const [amount, updateAmount] = useState(null);
+function Converter({
+	getFromCurrency,
+	getToCurrency,
+	parent,
+	toCurrencyProp,
+	fromCurrencyProp,
+}) {
+	const [amount, updateAmount] = useState(1);
 	const [currencyList, updateCurrencyList] = useState([]);
+	const [allSymbols, updateAllSymbols] = useState([]);
 	const [fromCurrency, updateFromCurrency] = useState(null);
+	const [fromCurrencyName, updateFromCurrencyName] = useState(null);
 	const [toCurrency, updateToCurrency] = useState(null);
 	const [conversionResult, updateConversionResult] = useState(null);
 	const [unitRate, updateUnitRate] = useState(null);
+
 	useEffect(() => {
 		if (fromCurrency && toCurrency) {
 			handleConvert(1);
@@ -19,8 +28,18 @@ function Converter({ getFromCurrency }) {
 				handleConvert();
 			}
 		}
+		if (fromCurrency) {
+			updateFromCurrencyName(allSymbols[fromCurrency]);
+		}
 		// eslint-disable-next-line
-	}, [fromCurrency, toCurrency]);
+	}, [fromCurrency, toCurrency, allSymbols]);
+
+	useEffect(() => {
+		if (toCurrencyProp && fromCurrencyProp) {
+			updateFromCurrency(fromCurrencyProp);
+			updateToCurrency(toCurrencyProp);
+		}
+	}, [toCurrencyProp, fromCurrencyProp]);
 	const handleChange = (e) => {
 		const fieldName = e.target.id;
 		const value = e.target.value;
@@ -37,6 +56,7 @@ function Converter({ getFromCurrency }) {
 			}
 			case "toCurrency": {
 				updateToCurrency(value);
+				getToCurrency(value);
 				break;
 			}
 			default: {
@@ -72,6 +92,7 @@ function Converter({ getFromCurrency }) {
 					symbolsOptions.push({ value: symbol, label: symbol });
 				});
 				updateCurrencyList(symbolsOptions);
+				updateAllSymbols(success.symbols);
 			},
 			(fail) => {
 				console.log(fail);
@@ -87,7 +108,20 @@ function Converter({ getFromCurrency }) {
 	};
 	return (
 		<div className="converter">
-			<h1 className="main-title">Currency Exchanger</h1>
+			{parent === "details" ? (
+				<div className="d-flex justify-content-between">
+					<h2>
+						{fromCurrency}-{fromCurrencyName}
+					</h2>
+					<div>
+						<Link to="/" className="backToHome-btn">
+							Back to Home
+						</Link>
+					</div>
+				</div>
+			) : (
+				<h1 className="main-title">Currency Exchanger</h1>
+			)}
 			<Row>
 				{/* Currency Amount Section */}
 				<Col md={8} xs={24} className="amount-section">
@@ -172,7 +206,7 @@ function Converter({ getFromCurrency }) {
 						<Button
 							type="primary"
 							className="w-100 convert-button"
-							disabled={!fromCurrency || !toCurrency}
+							disabled={!fromCurrency || !toCurrency || !amount}
 							onClick={() => {
 								handleConvert();
 							}}>
@@ -184,7 +218,16 @@ function Converter({ getFromCurrency }) {
 									{conversionResult}
 									{toCurrency}
 								</div>
-								<Link to="/">More Details</Link>
+								{parent !== "details" && (
+									<Link
+										to={"/details"}
+										state={{
+											from: fromCurrency,
+											to: toCurrency,
+										}}>
+										More Details
+									</Link>
+								)}
 							</div>
 						)}
 					</section>
